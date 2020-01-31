@@ -104,6 +104,6 @@ dist
 .tern-port
 
 # Folders
-/import/*[json|txt|csv]
-/export/*[json|txt|csv]
-/workingDir*[json|txt|csv|js]
+/import
+/export
+/workingDir
