@@ -22,7 +22,8 @@ const multibar = new cliProgress.MultiBar({
     format: '{barName} |' + _colors.cyan('{bar}') + '| {percentage}% || {value}/{total} Chunks || Speed: {speed}',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
-    hideCursor: true
+    hideCursor: true,
+    stopOnComplete: true,
 });
 const what = new LogGenerator('deviceGroupUpdate',"applog",{debug:debugAndTest});
 
@@ -31,8 +32,7 @@ return dirContents('./import/bulkJson')
 .then((t) => Promise.all(t.map((d) => readFile(`./import/bulkJson/${d}`))))
 .then((t) => Promise.all(t.map((d) => JSON.parse(d))))
 .then((t) => {
-    return Promise.all(t.map(({payload,groupId,description}) => {
-        
+    return Promise.all(t.map(({payload,groupId,description},i) => {
         return iseConnectionTest(iseServer, iseAuth, {payload} ,false)
         .then((t) => metaDataUpdate(t,{groupId,description,test:debugAndTest,rejects:[],multibar,barId:description}))
         .then(iseEndPointsMacLookup)
