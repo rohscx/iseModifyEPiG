@@ -10,7 +10,7 @@ const data = require('./import/fciFacilities.json');
 const {objectKeyFilter,dirContents,readFile} = require("nodeutilz");
 const cliProgress = require('cli-progress');
 const _colors = require('colors');
-
+const Bottleneck =  require("bottleneck");
 
 const dotenv = require('dotenv').config();
 const iseAuth = process.env.ISE_AUTH;
@@ -27,6 +27,11 @@ const multibar = new cliProgress.MultiBar({
 });
 const what = new LogGenerator('deviceGroupUpdate',"applog",{debug:debugAndTest});
 
+const limiter = new Bottleneck({
+    maxConcurrent: 1,
+    minTime: 1000
+  });
+
 
 return dirContents('./import/bulkJson')
 .then((t) => Promise.all(t.map((d) => readFile(`./import/bulkJson/${d}`))))
@@ -34,11 +39,11 @@ return dirContents('./import/bulkJson')
 .then((t) => {
     return Promise.all(t.map(({payload,groupId,description},i) => {
         return iseConnectionTest(iseServer, iseAuth, {payload} ,false)
-        .then((t) => metaDataUpdate(t,{groupId,description,test:debugAndTest,rejects:[],multibar,barId:description}))
+        .then((t) => metaDataUpdate(t,{groupId,description,test:debugAndTest,rejects:[],multibar,barId:description,limiter}))
         .then(iseEndPointsMacLookup)
         .then(iseEndPointsMacLookupDetail)
         .then(iseEndPointsEndpointUpdate)
-        .then(({payload,metaData}) => ({applog:{"payload":payload, metaData}}))
+        .then(({payload,metaData}) => ({applog:{"payload":payload}}))
         .then(what.log.bind(what))
         //.then(console.log)
         .catch(console.error)
