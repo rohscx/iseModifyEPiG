@@ -27,9 +27,9 @@ const multibar = new cliProgress.MultiBar({
 });
 const what = new LogGenerator('deviceGroupUpdate',"applog",{debug:debugAndTest});
 
-const limiter = new Bottleneck({
-    maxConcurrent: 1,
-    minTime: 1000
+const limiter = new Bottleneck.Group({
+    maxConcurrent: 4,
+    minTime: 333,
   });
 
 
