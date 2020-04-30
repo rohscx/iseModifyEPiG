@@ -103,7 +103,14 @@ dist
 # TernJS port file
 .tern-port
 
-# Folders
-/import/*[json|txt|csv]
-/export/*[json|txt|csv]
-/workingDir/*[json|txt|csv|js]
+# Custom
+securityConfiguration.js
+export/*/*[.png,.txt,.js,.json,.csv,.html]
+import/*/*[.png,.txt,.js,.json,.csv,.html]
+tasks/*/*[.png,.txt,.js,.json,.csv,.html]
+workingDir/*/*[.png,.txt,.js,.json,.csv,.html]
+export/*[.png,.txt,.js,.json,.csv,.html]
+import/*[.png,.txt,.js,.json,.csv,.html]
+tasks/*[.png,.txt,.js,.json,.csv,.html]
+workingDir/*[.png,.txt,.js,.json,.csv,.html]
+archive/
